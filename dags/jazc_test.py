@@ -2,6 +2,7 @@ from datetime import datetime
 
 from airflow import DAG
 from airflow.decorators import task
+from customized.operators.bash_operator import MyBashOperator
 
 default_args = {
     'owner': 'jazc',
@@ -32,4 +33,10 @@ with DAG(
     def hello_bye(a, b):
         print(a, b)
 
-    hello_bye(say_hello, bye_world)
+    my_custom_operator = MyBashOperator(
+        task_id='custom_bash', 
+        command="echo Hellow"
+    )
+
+
+    hello_bye(say_hello, bye_world) >> my_custom_operator
